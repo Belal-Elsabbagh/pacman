@@ -1,5 +1,8 @@
 # Pacman Searching Agent
 
+- Belal Adel `2020/11213`
+- Habiba Amr `2020/08121`
+
 ## About The Project
 
 Pacman is a game where Pacman (the yellow circle with a mouth in the above figure) moves around in a maze and tries to eat as many food pellets (the small white dots) as possible, while avoiding the ghosts (the other two agents with eyes in the above figure). If Pacman eats all the food in a maze, it wins.
