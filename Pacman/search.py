@@ -308,8 +308,36 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     util.raiseNotDefined()
 
 
+def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
+    """Search the node that has the lowest heuristic first."""
+    from util import PriorityQueue
+    open_list = PriorityQueue()
+    visited_list = []
+    path = []
+    priority = 0 
+    start_position = problem.getStartState()
+    open_list.push((start_position, path), priority)
+    while not open_list.isEmpty():
+        current_node = open_list.pop()
+        position = current_node[0]
+        path = current_node[1]
+        if problem.isGoalState(position):
+            return path
+        if position not in visited_list:
+            visited_list.append(position)
+            successors = problem.getSuccessors(position)
+            for item in successors:
+                if item[0] not in visited_list:
+                    new_position = item[0]
+                    new_path = path + [item[1]]
+                    new_priority = heuristic(new_position, problem)
+                    open_list.push((new_position, new_path), new_priority)
+
+    util.raiseNotDefined()
+
 # Abbreviations
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
+gbfs = greedyBestFirstSearch
