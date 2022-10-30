@@ -29,6 +29,7 @@
 import sys
 import inspect
 import heapq, random
+from xml.dom import NotFoundErr
 
 
 class FixedRandom:
@@ -201,9 +202,12 @@ class PriorityQueue:
                 del self.heap[index]
                 self.heap.append((priority, c, item))
                 heapq.heapify(self.heap)
-                break
-        else:
-            self.push(item, priority)
+                return None
+        self.push(item, priority)
+        return None
+
+    def get_items(self):
+        return (node[2][0] for node in self.heap)
 
 class PriorityQueueWithFunction(PriorityQueue):
     """
