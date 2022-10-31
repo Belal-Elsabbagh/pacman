@@ -550,8 +550,6 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-
     start_position = problem.startingGameState
     food_list = foodGrid.asList()
     heuristic = 0   # Initializes the heuristic to 0.
@@ -566,8 +564,6 @@ def foodHeuristic(state, problem):
         if foodDistance > heuristic:
             heuristic = foodDistance
     return heuristic
-
-    return 0
 
 
 class ClosestDotSearchAgent(SearchAgent):

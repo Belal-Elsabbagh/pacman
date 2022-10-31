@@ -1,0 +1,11 @@
+﻿searching algorithm,heuristic function,maze,path cost,total nodes expanded,score
+dfs,nullHeuristic,mediumMaze,130,146,380
+bfs,nullHeuristic,mediumMaze,68,275,442
+ucs,nullHeuristic,mediumMaze,68,269,442
+gbfs,manhattanHeuristic,mediumMaze,74,78,436
+astar,manhattanHeuristic,mediumMaze,68,221,442
+dfs,nullHeuristic,bigMaze,210,390,300
+bfs,nullHeuristic,bigMaze,210,620,300
+ucs,nullHeuristic,bigMaze,210,620,300
+gbfs,manhattanHeuristic,bigMaze,210,446,300
+astar,manhattanHeuristic,bigMaze,210,549,300

@@ -49,7 +49,7 @@ ___
 - **searchTestClasses.py** - Searching algorithms auto grading test classes.
 ___ 
 
-## Commands line tools
+## Command line tools
 
 ### Command line arguments 
 - Show this help message and exit by typing `python pacman.py --help`
@@ -205,6 +205,21 @@ ___
       2. the next position choice function.
    4. The agent executes the action to go to the next position.
    5. The interface engine updates the frame with the new state.
+
+## Results of search
+
+| searching algorithm | heuristic function | maze       | path cost | total nodes expanded | score |
+|---------------------|--------------------|------------|:---------:|:--------------------:|:-----:|
+| dfs                 | nullHeuristic      | mediumMaze |    130    |         146          |  380  |
+| bfs                 | nullHeuristic      | mediumMaze |    68     |         275          |  442  |
+| ucs                 | nullHeuristic      | mediumMaze |    68     |         269          |  442  |
+| gbfs                | manhattanHeuristic | mediumMaze |    74     |          78          |  436  |
+| astar               | manhattanHeuristic | mediumMaze |    68     |         221          |  442  |
+| dfs                 | nullHeuristic      | bigMaze    |    210    |         390          |  300  |
+| bfs                 | nullHeuristic      | bigMaze    |    210    |         620          |  300  |
+| ucs                 | nullHeuristic      | bigMaze    |    210    |         620          |  300  |
+| gbfs                | manhattanHeuristic | bigMaze    |    210    |         446          |  300  |
+| astar               | manhattanHeuristic | bigMaze    |    210    |         549          |  300  |
 
 ## References
 http://ai.berkeley.edu/project_overview.html
