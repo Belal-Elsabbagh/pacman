@@ -110,18 +110,10 @@ def search_engine(_problem, _open_list, ignore_cost=False, blind_search=False, h
             return path
         successors = problem.getSuccessors(position)
         for next_node, action, _ in successors:
-            if next_node in visited_list:
-                continue
-            pos, path, priority = get_next_state(action, blind_search, heuristic, ignore_cost, next_node, path, problem)
-            push_to_frontier(open_list, (pos, path), priority)
-
-
-def get_next_state(action, blind_search, heuristic, ignore_cost, next_node, path, problem):
-    new_position = next_node
-    new_path = path + [action]
-    cost_of_path = problem.getCostOfActions(new_path) if not ignore_cost else 0
-    new_priority = (cost_of_path + heuristic(new_position, problem)) if not blind_search else None
-    return new_position, new_path, new_priority
+            new_path = path + [action]
+            cost_of_path = problem.getCostOfActions(new_path) if not ignore_cost else 0
+            new_priority = (cost_of_path + heuristic(next_node, problem)) if not blind_search else None
+            push_to_frontier(open_list, (next_node, new_path), new_priority)
 
 
 def depthFirstSearch(problem):
@@ -141,7 +133,7 @@ def aStarSearch(problem, heuristic=nullHeuristic, ignore_cost=False):
 
 def uniformCostSearch(problem):
     """Search the node of the least total cost first."""
-    return search_engine(_problem=problem, _open_list=PriorityQueue(), ignore_cost=True, blind_search=True)
+    return search_engine(_problem=problem, _open_list=PriorityQueue(), ignore_cost=True, blind_search=False)
 
 
 def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
