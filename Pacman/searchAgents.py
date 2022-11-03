@@ -13,7 +13,7 @@
 
 
 """
-This file contains all of the agents that can be selected to control Pacman.  To
+This file contains all the agents that can be selected to control Pacman.  To
 select an agent, use the '-p' option when running pacman.py.  Arguments can be
 passed to your agent using '-a'.  For example, to load a SearchAgent that uses
 depth first search (dfs), run the following command:
@@ -112,7 +112,7 @@ class SearchAgent(Agent):
         This is the first time that the agent sees the layout of the game
         board. Here, we choose a path to the goal. In this phase, the agent
         should compute the path to the goal and store it in a local variable.
-        All of the work is done in this method!
+        All the work is done in this method!
 
         state: a GameState object (pacman.py)
         """
@@ -130,7 +130,7 @@ class SearchAgent(Agent):
     def getAction(self, state):
         """
         Returns the next action in the path chosen earlier (in
-        registerInitialState).  Return Directions.STOP if there is no further
+        registerInitialState).  Return `Directions.STOP` if there is no further
         action to take.
 
         state: a GameState object (pacman.py)
@@ -235,7 +235,7 @@ class PositionSearchProblem(search.SearchProblem):
         x, y = self.getStartState()
         cost = 0
         for action in actions:
-            # Check figure out the next state and see whether its' legal
+            # Check figure out the next state and see whether it's legal
             dx, dy = Actions.directionToVector(action)
             x, y = int(x + dx), int(y + dy)
             if self.walls[x][y]:
@@ -422,8 +422,6 @@ def cornersHeuristic(state, problem):
     # These are the walls of the maze, as a Grid (game.py)
     walls = problem.walls
 
-    "*** YOUR CODE HERE ***"
-
     from util import manhattanDistance
 
     current_position = state[0]
@@ -447,8 +445,6 @@ def cornersHeuristic(state, problem):
     # Returns maximum distance between the current position and the farthest corner.
     return heuristic
 
-    return 0  # Default to trivial solution
-
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -461,7 +457,7 @@ class AStarCornersAgent(SearchAgent):
 
 class FoodSearchProblem:
     """
-    A search problem associated with finding the a path that collects all of the
+    A search problem associated with finding the path that collects all the
     food (dots) in a Pacman game.
 
     A search state in this problem is a tuple ( pacmanPosition, foodGrid ) where
@@ -516,8 +512,7 @@ class AStarFoodSearchAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
 
     def __init__(self):
-        self.searchFunction = lambda prob: search.aStarSearch(
-            prob, foodHeuristic)
+        self.searchFunction = lambda prob: search.aStarSearch(prob, foodHeuristic)
         self.searchType = FoodSearchProblem
 
 
@@ -539,7 +534,7 @@ def foodHeuristic(state, problem):
     a list of food coordinates instead.
 
     If you want access to info like walls, capsules, etc., you can query the
-    problem.  For example, problem.walls gives you a Grid of where the walls
+    problem.  For example, `problem.walls` gives you a Grid of where the walls
     are.
 
     If you want to *store* information to be reused in other calls to the
@@ -647,8 +642,6 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         # Returns True if the state is in the food list, otherwise returns False.
         return flag
 
-        util.raiseNotDefined()
-
 
 def mazeDistance(point1, point2, gameState):
     """
@@ -665,6 +658,5 @@ def mazeDistance(point1, point2, gameState):
     walls = gameState.getWalls()
     assert not walls[x1][y1], 'point1 is a wall: ' + str(point1)
     assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
-    prob = PositionSearchProblem(
-        gameState, start=point1, goal=point2, warn=False, visualize=False)
+    prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
     return len(search.bfs(prob))
