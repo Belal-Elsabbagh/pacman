@@ -17,8 +17,6 @@
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
-import math
-import sys
 
 import util
 from util import Queue, Stack, PriorityQueue
@@ -91,13 +89,13 @@ def search_engine(_problem, _open_list):
         if position not in visited_list:
             visited_list.append(position)
         if problem.isGoalState(position):
+            print(f'Directions: {path}')
             return path
         successors = problem.getSuccessors(position)
         for successor, action, _ in successors:
             if successor not in visited_list:
                 new_path = path + [action]
                 open_list.push((successor, new_path))
-    util.raiseNotDefined()
 
 
 def depthFirstSearch(problem):
@@ -108,11 +106,6 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     return search_engine(problem, Queue())
-
-
-def uniformCostSearch(problem):
-    """Search the node of the least total cost first."""
-    return aStarSearch(problem, nullHeuristic)
 
 
 def nullHeuristic(state, problem=None):
@@ -134,6 +127,7 @@ def aStarSearch(problem, heuristic=nullHeuristic, ignore_cost=False):
     while not open_list.isEmpty():
         position, path = open_list.pop()
         if problem.isGoalState(position):
+            print(f'Directions: {path}')
             return path
         if position in visited_list:
             continue
@@ -148,7 +142,10 @@ def aStarSearch(problem, heuristic=nullHeuristic, ignore_cost=False):
             new_priority = cost_of_path + heuristic(new_position, problem)
             open_list.push((new_position, new_path), new_priority)
 
-    util.raiseNotDefined()
+
+def uniformCostSearch(problem):
+    """Search the node of the least total cost first."""
+    return aStarSearch(problem, nullHeuristic)
 
 
 def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
