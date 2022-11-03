@@ -93,13 +93,8 @@ def push_to_frontier(frontier, _object, priority=None):
 
 def search_engine(_problem, _open_list, ignore_cost=False, blind_search=False, heuristic=nullHeuristic):
     """Runs a search on the given problem with the given data structure to store the frontiers."""
-    problem = _problem
-    open_list = _open_list
-    visited_list = []
-    path = []
-    start_position = problem.getStartState()
-    priority = None if blind_search else 0
-    push_to_frontier(open_list, (start_position, path), priority)
+    open_list, path, priority, problem, position, visited_list = init_search_engine(_open_list, _problem, blind_search)
+    push_to_frontier(open_list, (position, path), priority)
     while not open_list.isEmpty():
         position, path = open_list.pop()
         if position in visited_list:
@@ -111,9 +106,23 @@ def search_engine(_problem, _open_list, ignore_cost=False, blind_search=False, h
         successors = problem.getSuccessors(position)
         for next_node, action, _ in successors:
             new_path = path + [action]
-            cost_of_path = problem.getCostOfActions(new_path) if not ignore_cost else 0
-            new_priority = (cost_of_path + heuristic(next_node, problem)) if not blind_search else None
+            new_priority = calculate_priority(blind_search, heuristic, ignore_cost, new_path, next_node, problem)
             push_to_frontier(open_list, (next_node, new_path), new_priority)
+
+
+def calculate_priority(blind_search, heuristic, ignore_cost, new_path, next_node, problem):
+    cost_of_path = problem.getCostOfActions(new_path) if not ignore_cost else 0
+    return (cost_of_path + heuristic(next_node, problem)) if not blind_search else None
+
+
+def init_search_engine(_open_list, _problem, blind_search):
+    problem = _problem
+    open_list = _open_list
+    visited_list = []
+    path = []
+    start_position = problem.getStartState()
+    priority = None if blind_search else 0
+    return open_list, path, priority, problem, start_position, visited_list
 
 
 def depthFirstSearch(problem):
