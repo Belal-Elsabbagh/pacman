@@ -76,38 +76,6 @@ def tinyMazeSearch(problem):
     return [s, s, w, s, w, w, s, w]
 
 
-def search_engine(_problem, _open_list):
-    """Runs a search on the given problem with the given data structure to store the frontiers."""
-    problem = _problem
-    open_list = _open_list
-    visited_list = []
-    path = []
-    start_position = problem.getStartState()
-    open_list.push((start_position, path))
-    while not open_list.isEmpty():
-        position, path = open_list.pop()
-        if position not in visited_list:
-            visited_list.append(position)
-        if problem.isGoalState(position):
-            print(f'Directions: {path}')
-            return path
-        successors = problem.getSuccessors(position)
-        for successor, action, _ in successors:
-            if successor not in visited_list:
-                new_path = path + [action]
-                open_list.push((successor, new_path))
-
-
-def depthFirstSearch(problem):
-    """Search the deepest nodes in the search tree first."""
-    return search_engine(problem, Stack())
-
-
-def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
-    return search_engine(problem, Queue())
-
-
 def nullHeuristic(state, problem=None):
     """
     A heuristic function estimates the cost from the current state to the nearest
@@ -116,41 +84,69 @@ def nullHeuristic(state, problem=None):
     return 0
 
 
-def aStarSearch(problem, heuristic=nullHeuristic, ignore_cost=False):
-    """Search the node that has the lowest combined cost and heuristic first."""
-    open_list = PriorityQueue()
+def push_to_frontier(frontier, _object, priority=None):
+    if priority is None:
+        frontier.push(_object)
+        return
+    frontier.push(_object, priority)
+
+
+def search_engine(_problem, _open_list, ignore_cost=False, blind_search=False, heuristic=nullHeuristic):
+    """Runs a search on the given problem with the given data structure to store the frontiers."""
+    problem = _problem
+    open_list = _open_list
     visited_list = []
     path = []
-    priority = 0
     start_position = problem.getStartState()
-    open_list.push((start_position, path), priority)
+    priority = None if blind_search else 0
+    push_to_frontier(open_list, (start_position, path), priority)
     while not open_list.isEmpty():
         position, path = open_list.pop()
-        if problem.isGoalState(position):
-            print(f'Directions: {path}')
-            return path
         if position in visited_list:
             continue
         visited_list.append(position)
+        if problem.isGoalState(position):
+            print(f'Directions: {path}')
+            return path
         successors = problem.getSuccessors(position)
         for next_node, action, _ in successors:
             if next_node in visited_list:
                 continue
-            new_position = next_node
-            new_path = path + [action]
-            cost_of_path = problem.getCostOfActions(new_path) if not ignore_cost else 0
-            new_priority = cost_of_path + heuristic(new_position, problem)
-            open_list.push((new_position, new_path), new_priority)
+            pos, path, priority = get_next_state(action, blind_search, heuristic, ignore_cost, next_node, path, problem)
+            push_to_frontier(open_list, (pos, path), priority)
+
+
+def get_next_state(action, blind_search, heuristic, ignore_cost, next_node, path, problem):
+    new_position = next_node
+    new_path = path + [action]
+    cost_of_path = problem.getCostOfActions(new_path) if not ignore_cost else 0
+    new_priority = (cost_of_path + heuristic(new_position, problem)) if not blind_search else None
+    return new_position, new_path, new_priority
+
+
+def depthFirstSearch(problem):
+    """Search the deepest nodes in the search tree first."""
+    return search_engine(problem, Stack(), ignore_cost=True, blind_search=True)
+
+
+def breadthFirstSearch(problem):
+    """Search the shallowest nodes in the search tree first."""
+    return search_engine(problem, Queue(), ignore_cost=True, blind_search=True)
+
+
+def aStarSearch(problem, heuristic=nullHeuristic, ignore_cost=False):
+    """Search the node that has the lowest combined cost and heuristic first."""
+    return search_engine(_problem=problem, _open_list=PriorityQueue(), heuristic=heuristic)
 
 
 def uniformCostSearch(problem):
     """Search the node of the least total cost first."""
-    return aStarSearch(problem, nullHeuristic)
+    return search_engine(_problem=problem, _open_list=PriorityQueue(), ignore_cost=True, blind_search=True)
 
 
 def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest heuristic first."""
-    return aStarSearch(problem, heuristic, ignore_cost=True)
+    return search_engine(_problem=problem, _open_list=PriorityQueue(), ignore_cost=True, heuristic=heuristic)
 
 
 # Abbreviations
