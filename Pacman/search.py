@@ -84,6 +84,19 @@ def nullHeuristic(state, problem=None):
     return 0
 
 
+def calculate_priority(blind_search, heuristic, ignore_cost, new_path, next_node, problem):
+    cost_of_path = problem.getCostOfActions(new_path) if not ignore_cost else 0
+    return (cost_of_path + heuristic(next_node, problem)) if not blind_search else None
+
+
+def init_search_engine(_problem, blind_search):
+    visited_list = []
+    path = []
+    start_position = _problem.getStartState()
+    priority = None if blind_search else 0
+    return path, priority, start_position, visited_list
+
+
 def push_to_frontier(frontier, _object, priority=None):
     if priority is None:
         frontier.push(_object)
@@ -93,10 +106,10 @@ def push_to_frontier(frontier, _object, priority=None):
 
 def search_engine(_problem, _open_list, ignore_cost=False, blind_search=False, heuristic=nullHeuristic):
     """Runs a search on the given problem with the given data structure to store the frontiers."""
-    open_list, path, priority, position, visited_list = init_search_engine(_open_list, _problem, blind_search)
-    push_to_frontier(open_list, (position, path), priority)
-    while not open_list.isEmpty():
-        position, path = open_list.pop()
+    path, priority, position, visited_list = init_search_engine(_problem, blind_search)
+    push_to_frontier(_open_list, (position, path), priority)
+    while not _open_list.isEmpty():
+        position, path = _open_list.pop()
         if position in visited_list:
             continue
         visited_list.append(position)
@@ -107,22 +120,7 @@ def search_engine(_problem, _open_list, ignore_cost=False, blind_search=False, h
         for next_node, action, _ in successors:
             new_path = path + [action]
             new_priority = calculate_priority(blind_search, heuristic, ignore_cost, new_path, next_node, _problem)
-            push_to_frontier(open_list, (next_node, new_path), new_priority)
-
-
-def calculate_priority(blind_search, heuristic, ignore_cost, new_path, next_node, problem):
-    cost_of_path = problem.getCostOfActions(new_path) if not ignore_cost else 0
-    return (cost_of_path + heuristic(next_node, problem)) if not blind_search else None
-
-
-def init_search_engine(_open_list, _problem, blind_search):
-    problem = _problem
-    open_list = _open_list
-    visited_list = []
-    path = []
-    start_position = problem.getStartState()
-    priority = None if blind_search else 0
-    return open_list, path, priority, start_position, visited_list
+            push_to_frontier(_open_list, (next_node, new_path), new_priority)
 
 
 def depthFirstSearch(problem):
@@ -135,7 +133,7 @@ def breadthFirstSearch(problem):
     return search_engine(problem, Queue(), ignore_cost=True, blind_search=True)
 
 
-def aStarSearch(problem, heuristic=nullHeuristic, ignore_cost=False):
+def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     return search_engine(_problem=problem, _open_list=PriorityQueue(), heuristic=heuristic)
 
